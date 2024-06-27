@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 //추상클래스로 만들어서
 //상속 받은 애들이 구현을 해도 되고 안해도 되는 형태
-abstract public class SimpleDataRepository<T extends Entity,ID extends Long>  implements DataRepository<T, ID>{
+abstract public class SimpleDataRepository<T extends Entity, ID extends Long>  implements DataRepository<T, ID>{
 
     //자신만의 저장 공간
 
@@ -38,14 +38,14 @@ abstract public class SimpleDataRepository<T extends Entity,ID extends Long>  im
                 .filter(it -> {
                    return it.getId().equals(data.getId());
                 })
-                        .findFirst();
+                        .findFirst(); //Optional 반환
 
         //데이터가 있으면 update, 없으면 insert
         if (prevData.isPresent()){
             //기존 데이터 있는 경우 : 업데이트
-            dataList.remove(prevData);
+            dataList.remove(prevData.get());
             dataList.add(data);
-            //기존 데이터를 삭제하고 빈자리에 다시 집어넣음
+            //기존 데이터를 삭제하 고 빈자리에 다시 집어넣음
             //이때 id는 유지
         } else {
             //기존 데이터 없는 경우
@@ -57,7 +57,7 @@ abstract public class SimpleDataRepository<T extends Entity,ID extends Long>  im
         }
 
 
-        return null;
+        return data;
     }
 
     //read
@@ -88,7 +88,7 @@ abstract public class SimpleDataRepository<T extends Entity,ID extends Long>  im
                 .findFirst();
 
         if (deleteEntity.isPresent()){
-            dataList.remove(deleteEntity);
+            dataList.remove(deleteEntity.get());
         }
 
     }
